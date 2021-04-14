@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老化查询平台</title>
+</head>
+<body>
+    <table border="4">
+        <tr>
+            <th>available可用内存(M)</th>
+            <th>根目录空间大小(M)</th>
+            <th>TCP连接数</th>
+            <th>剩余CPU</th>
+            <th>僵尸进程数</th>
+        </tr>
+        <tr>
+            <td>{{ return_dict[0] }}</td>
+            <td>{{ return_dict[1] }}</td>
+            <td>{{ return_dict[2] }}</td>
+            <td>{{ return_dict[3] }}</td>
+            <td>{{ return_dict[4] }}</td>
+        </tr>
+    </table>
+</body>
+</html>
