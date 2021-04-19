@@ -7,21 +7,47 @@
     <title>老化查询平台</title>
 </head>
 <body>
-    <table border="4">
-        <tr>
-            <th>available可用内存(M)</th>
-            <th>根目录空间大小(M)</th>
-            <th>TCP连接数</th>
-            <th>剩余CPU</th>
-            <th>僵尸进程数</th>
-        </tr>
-        <tr>
-            <td>{{ return_dict[0] }}</td>
-            <td>{{ return_dict[1] }}</td>
-            <td>{{ return_dict[2] }}</td>
-            <td>{{ return_dict[3] }}</td>
-            <td>{{ return_dict[4] }}</td>
-        </tr>
-    </table>
+    <div>
+        <table border="3">
+            <tr>
+                <th>可用内存(M)</th>
+                <th>剩余CPU</th>
+                <th>TCP连接数</th>
+                <th>根目录空间大小(G)</th>
+                <th>僵尸进程数</th>
+                <th>tomcat虚拟内存(M)</th>
+                <th>tomcat物理内存(M)</th>
+                <th>tomcat_CPU</th>
+                <th>x1虚拟内存(M)</th>
+                <th>x1物理内存(M)</th>
+                <th>x1_CPU</th>
+                <th>mysql虚拟内存(M)</th>
+                <th>mysql物理内存(M)</th>
+                <th>mysql_CPU</th>
+                <th>cassandra虚拟内存(M)</th>
+                <th>cassandra物理内存(M)</th>
+                <th>cassandra_CPU</th>
+            </tr>
+            <tr>
+                <td>{{ return_dict[0] }}</td>
+                <td>{{ return_dict[1] }}</td>
+                <td>{{ return_dict[2] }}</td>
+                <td>{{ return_dict[3] }}</td>
+                <td>{{ return_dict[4] }}</td>
+                <td>{{ return_dict[5] }}</td>
+                <td>{{ return_dict[6] }}</td>
+                <td>{{ return_dict[7] }}</td>
+                <td>{{ return_dict[8] }}</td>
+                <td>{{ return_dict[9] }}</td>
+                <td>{{ return_dict[10] }}</td>
+                <td>{{ return_dict[11] }}</td>
+                <td>{{ return_dict[12] }}</td>
+                <td>{{ return_dict[13] }}</td>
+                <td>{{ return_dict[14] }}</td>
+                <td>{{ return_dict[15] }}</td>
+                <td>{{ return_dict[16] }}</td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

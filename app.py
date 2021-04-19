@@ -34,31 +34,69 @@ def get_aging():
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(IP_ADDRESS,PORT,USER,PASSWORD)
-    stdin, stdout, stderr = ssh.exec_command("free -m | sed -n '2p' | awk '{print$(NF)}'")
+    # 远程对服务器进行top指令查询
+    stdin, stdout, stderr = ssh.exec_command("free -m | sed -n '2p' | awk '{print$(NF)}'",get_pty=True)
     AVAILABLE_MEMORY = int(stdout.read().decode('utf-8'))
-    stdin, stdout, stderr = ssh.exec_command("df -m / | sed -n '2p' | awk '{print$4}'")
-    SPACE_SIZE = int(stdout.read().decode('utf-8'))
-    stdin, stdout, stderr = ssh.exec_command('netstat -an | grep tcp | wc -l')
-    TCP_CONNECT = int(stdout.read().decode('utf-8'))
-    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep '%Cpu' -A 0 | awk '{print$8}'")
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep '%Cpu' -A 0 | awk '{print$8}'",get_pty=True)
     CPU = float(stdout.read().decode('utf-8'))
-    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep 'Tasks' -A 0 | awk '{print$(NF-1)}'")
+    stdin, stdout, stderr = ssh.exec_command('netstat -an | grep tcp | wc -l',get_pty=True)
+    TCP_CONNECT = int(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("df -h / | sed -n '2p' | awk '{print$4}'",get_pty=True)
+    SPACE_SIZE = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep 'Tasks' -A 0 | awk '{print$(NF-1)}'",get_pty=True)
     ZOMBIE = int(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print$(NF-7)}'",get_pty=True)
+    TOMCAT_VIRT = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print$(NF-6)}'",get_pty=True)
+    TOMCAT_RES = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print$(NF-3)}'",get_pty=True)
+    TOMCAT_CPU = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print$(NF-7)}'",get_pty=True)
+    X1_VIRT = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print$(NF-6)}'",get_pty=True)
+    X1_RES = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print$(NF-3)}'",get_pty=True)
+    X1_CPU = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print$(NF-7)}'",get_pty=True)   
+    MYSQL_VIRT = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print$(NF-6)}'",get_pty=True)
+    MYSQL_RES = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print$(NF-3)}'",get_pty=True)
+    MYSQL_CPU = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassandra | awk '{print$(NF-7)}'",get_pty=True)
+    CASSANDRA_VIRT = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassandra | awk '{print$(NF-6)}'",get_pty=True)
+    CASSANDRA_RES = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassandra | awk '{print$(NF-3)}'",get_pty=True)
+    CASSANDRA_CPU = str(stdout.read().decode('utf-8'))
     ssh.close() # 关闭连接
     '''
     return_dict = {
     'AVAILABLE_MEMORY' : AVAILABLE_MEMORY,
-    'SPACE_SIZE' : SPACE_SIZE,
-    'TCP_CONNECT' : TCP_CONNECT,
     'CPU' : CPU,
+    'TCP_CONNECT' : TCP_CONNECT,
+    'SPACE_SIZE' : SPACE_SIZE,
     'ZOMBIE' : ZOMBIE,
+    'TOMCAT_VIRT' : TOMCAT_VIRT,
+    'TOMCAT_RES' : TOMCAT_RES,
+    'TOMCAT_CPU' : TOMCAT_CPU,
+    'X1_VIRT' : X1_VIRT,
+    'X1_RES' : X1_RES,
+    'X1_CPU' : X1_CPU,
+    'MYSQL_VIRT' : MYSQL_VIRT,
+    'MYSQL_RES' : MYSQL_RES,
+    'MYSQL_CPU' : MYSQL_CPU,
+    'CASSANDRA_VIRT' : CASSANDRA_VIRT,
+    'CASSANDRA_RES' : CASSANDRA_RES,
+    'CASSANDRA_CPU' : CASSANDRA_CPU
     } # 返回参数
     return json.dumps(return_dict, ensure_ascii=False) # JSON格式对齐
     '''
-    return_dict = [AVAILABLE_MEMORY, SPACE_SIZE, TCP_CONNECT, CPU, ZOMBIE]
+    return_dict = [AVAILABLE_MEMORY, CPU, TCP_CONNECT, SPACE_SIZE, ZOMBIE, TOMCAT_VIRT, TOMCAT_RES, TOMCAT_CPU, X1_VIRT, X1_RES, X1_CPU, MYSQL_VIRT, MYSQL_RES, MYSQL_CPU, CASSANDRA_VIRT, CASSANDRA_RES, CASSANDRA_CPU]
     logger.debug(return_dict)
 
     return render_template('aging.html', return_dict=return_dict)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=5000, threaded=True) # threaded=True为开启多线程
