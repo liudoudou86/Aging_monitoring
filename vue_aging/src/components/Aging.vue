@@ -9,19 +9,19 @@
             <el-form label-width="100px" class="aging_form">
                 <!-- IP地址 -->
                 <el-form-item label="IP地址">
-                    <el-input></el-input>
+                    <el-input prefix-icon="el-icon-location"></el-input>
                 </el-form-item>
                 <!-- 端口 -->
                 <el-form-item label="端口">
-                    <el-input></el-input>
+                    <el-input prefix-icon="el-icon-monitor"></el-input>
                 </el-form-item>
                 <!-- 账户 -->
                 <el-form-item label="账户">
-                    <el-input></el-input>
+                    <el-input prefix-icon="el-icon-user-solid"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
                 <el-form-item label="密码">
-                    <el-input></el-input>
+                    <el-input prefix-icon="el-icon-key"></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
                 <el-form-item class="btns">
