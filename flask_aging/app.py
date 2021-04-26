@@ -3,6 +3,7 @@
 # Author:lz
 
 import json
+import time
 
 import paramiko
 from flask import Flask, jsonify, render_template, request
@@ -63,11 +64,11 @@ def get_aging():
     MYSQL_RES = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print $(NF-3)}'",get_pty=True)
     MYSQL_CPU = str(stdout.read().decode('utf-8'))
-    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassandra$ | awk '{print $(NF-7)}'",get_pty=True)
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-7)}'",get_pty=True)
     CASSANDRA_VIRT = str(stdout.read().decode('utf-8'))
-    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassandra$ | awk '{print $(NF-6)}'",get_pty=True)
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-6)}'",get_pty=True)
     CASSANDRA_RES = str(stdout.read().decode('utf-8'))
-    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassandra$ | awk '{print $(NF-3)}'",get_pty=True)
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-3)}'",get_pty=True)
     CASSANDRA_CPU = str(stdout.read().decode('utf-8'))
     ssh.close() # 关闭连接
     '''

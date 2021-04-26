@@ -6,22 +6,22 @@
                 <img src="../assets/tiandy_logo.png" alt="">
             </div>
             <!-- 登录表单区域 -->
-            <el-form label-width="100px" class="aging_form">
+            <el-form :model="agingForm" label-width="100px" class="aging_form">
                 <!-- IP地址 -->
-                <el-form-item label="IP地址">
-                    <el-input prefix-icon="el-icon-location"></el-input>
+                <el-form-item label="IP地址" prop="username">
+                    <el-input v-model="agingForm.ipaddress" prefix-icon="el-icon-location"></el-input>
                 </el-form-item>
                 <!-- 端口 -->
                 <el-form-item label="端口">
-                    <el-input prefix-icon="el-icon-monitor"></el-input>
+                    <el-input v-model="agingForm.port" prefix-icon="el-icon-monitor"></el-input>
                 </el-form-item>
                 <!-- 账户 -->
                 <el-form-item label="账户">
-                    <el-input prefix-icon="el-icon-user-solid"></el-input>
+                    <el-input v-model="agingForm.username" prefix-icon="el-icon-user-solid"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
                 <el-form-item label="密码">
-                    <el-input prefix-icon="el-icon-key"></el-input>
+                    <el-input v-model="agingForm.password" prefix-icon="el-icon-key" type="password"></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
                 <el-form-item class="btns">
@@ -34,7 +34,19 @@
 </template>
 
 <script>
-export default {}
+export default {
+    data () {
+        return {
+            // 这是表单的数据绑定对象
+            agingForm: {
+                ipaddress: '',
+                port: '',
+                username: '',
+                password: ''
+            }
+        }
+    }
+}
 </script>
 
 <style lang="less" scoped>
