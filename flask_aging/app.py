@@ -3,7 +3,6 @@
 # Author:lz
 
 import json
-import time
 
 import paramiko
 from flask import Flask, jsonify, render_template, request
@@ -47,29 +46,29 @@ def get_aging():
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep 'Tasks' -A 0 | awk '{print $(NF-1)}'",get_pty=True)
     ZOMBIE = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print $(NF-7)}'",get_pty=True)
-    TOMCAT_VIRT = str(stdout.read().decode('utf-8'))
+    TOMCAT_VIRT = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print $(NF-6)}'",get_pty=True)
     TOMCAT_RES = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print $(NF-3)}'",get_pty=True)
-    TOMCAT_CPU = str(stdout.read().decode('utf-8'))
+    TOMCAT_CPU = float(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print $(NF-7)}'",get_pty=True)
-    X1_VIRT = str(stdout.read().decode('utf-8'))
+    X1_VIRT = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print $(NF-6)}'",get_pty=True)
     X1_RES = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print $(NF-3)}'",get_pty=True)
-    X1_CPU = str(stdout.read().decode('utf-8'))
+    X1_CPU = float(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print $(NF-7)}'",get_pty=True)   
-    MYSQL_VIRT = str(stdout.read().decode('utf-8'))
+    MYSQL_VIRT = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print $(NF-6)}'",get_pty=True)
     MYSQL_RES = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print $(NF-3)}'",get_pty=True)
-    MYSQL_CPU = str(stdout.read().decode('utf-8'))
+    MYSQL_CPU = float(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-7)}'",get_pty=True)
-    CASSANDRA_VIRT = str(stdout.read().decode('utf-8'))
+    CASSANDRA_VIRT = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-6)}'",get_pty=True)
     CASSANDRA_RES = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-3)}'",get_pty=True)
-    CASSANDRA_CPU = str(stdout.read().decode('utf-8'))
+    CASSANDRA_CPU = float(stdout.read().decode('utf-8'))
     ssh.close() # 关闭连接
     '''
     return_dict = {
@@ -90,7 +89,7 @@ def get_aging():
     'CASSANDRA_VIRT' : CASSANDRA_VIRT,
     'CASSANDRA_RES' : CASSANDRA_RES,
     'CASSANDRA_CPU' : CASSANDRA_CPU
-    } # 返回参数
+    } 
     return json.dumps(return_dict, ensure_ascii=False) # JSON格式对齐
     '''
     return_dict = [AVAILABLE_MEMORY, CPU, TCP_CONNECT, SPACE_SIZE, ZOMBIE, TOMCAT_VIRT, TOMCAT_RES, TOMCAT_CPU, X1_VIRT, X1_RES, X1_CPU, MYSQL_VIRT, MYSQL_RES, MYSQL_CPU, CASSANDRA_VIRT, CASSANDRA_RES, CASSANDRA_CPU]
