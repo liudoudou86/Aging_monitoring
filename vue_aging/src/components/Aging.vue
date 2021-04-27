@@ -6,27 +6,27 @@
                 <img src="../assets/tiandy_logo.png" alt="">
             </div>
             <!-- 登录表单区域 -->
-            <el-form :model="agingForm" label-width="100px" class="aging_form">
+            <el-form ref="agingFormRef" :model="agingForm" :rules="agingFormRules" label-width="100px" class="aging_form">
                 <!-- IP地址 -->
-                <el-form-item label="IP地址" prop="username">
-                    <el-input v-model="agingForm.ipaddress" prefix-icon="el-icon-location"></el-input>
+                <el-form-item label="IP地址" prop="IP_ADDRESS">
+                    <el-input v-model="agingForm.IP_ADDRESS" prefix-icon="el-icon-location"></el-input>
                 </el-form-item>
                 <!-- 端口 -->
-                <el-form-item label="端口">
-                    <el-input v-model="agingForm.port" prefix-icon="el-icon-monitor"></el-input>
+                <el-form-item label="端口" prop="PORT">
+                    <el-input v-model="agingForm.PORT" prefix-icon="el-icon-monitor"></el-input>
                 </el-form-item>
                 <!-- 账户 -->
-                <el-form-item label="账户">
-                    <el-input v-model="agingForm.username" prefix-icon="el-icon-user-solid"></el-input>
+                <el-form-item label="账户" prop="USER">
+                    <el-input v-model="agingForm.USER" prefix-icon="el-icon-user-solid"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
-                <el-form-item label="密码">
-                    <el-input v-model="agingForm.password" prefix-icon="el-icon-key" type="password"></el-input>
+                <el-form-item label="密码" prop="PASSWORD">
+                    <el-input v-model="agingForm.PASSWORD" prefix-icon="el-icon-key" type="password"></el-input>
                 </el-form-item>
                 <!-- 按钮 -->
                 <el-form-item class="btns">
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
-                    <el-button>重置</el-button>
+                    <el-button type="primary" @click="submitAgingForm('agingFormRef')">查询</el-button>
+                    <el-button type="info" @click="resetAgingForm('agingFormRef')">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -37,13 +37,49 @@
 export default {
     data () {
         return {
-            // 这是表单的数据绑定对象
+            // 这是表单的数据绑定
             agingForm: {
-                ipaddress: '',
-                port: '',
-                username: '',
-                password: ''
+                IP_ADDRESS: '192.168.25.190',
+                PORT: '22',
+                USER: 'root',
+                PASSWORD: '111111'
+            },
+            // 这是表单的验证规则
+            agingFormRules: {
+                IP_ADDRESS: [
+                    { required: true, message: '请输入IP地址', trigger: 'blur' },
+                    { min: 4, max: 15, message: '长度在4到12个字符', trigger: 'blur' }
+                ],
+                PORT: [
+                    { required: true, message: '请输入端口号', trigger: 'blur' },
+                    { min: 2, max: 5, message: '长度在2到5个字符', trigger: 'blur' }
+                ],
+                USER: [
+                    { required: true, message: '请输入账户', trigger: 'blur' },
+                    { min: 4, max: 20, message: '长度在4到20个字符', trigger: 'blur' }
+                ],
+                PASSWORD: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { min: 6, max: 20, message: '长度在6到20个字符', trigger: 'blur' }
+                ]
             }
+        }        
+    },
+    methods: {
+        // 这是重置表单数据的按钮
+        resetAgingForm (agingFormRef) {
+            // console.log(this)
+            // 此为resetFields方法对未定义的判断
+            if (this.$refs[agingFormRef] !== undefined) {
+                this.$refs[agingFormRef].resetFields();
+            }
+        },
+        submitAgingForm (agingFormRef) {
+            this.$refs[agingFormRef].validate(async valid => {
+                if (!valid) return;
+                const result = await this.$http.get("aging?IP_ADDRESS=" + this.agingForm.IP_ADDRESS + "&PORT=" + this.agingForm.PORT + "&USER=" + this.agingForm.USER + "&PASSWORD=" + this.agingForm.PASSWORD);
+                console.log(result)
+            })
         }
     }
 }

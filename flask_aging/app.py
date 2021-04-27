@@ -20,7 +20,7 @@ app.config.from_object(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/aging', methods=['GET'])
+@app.route('/aging', methods=['GET'] or ['POST'])
 def get_aging():
     get_data = request.args.to_dict() # 获取传入的参数
     logger.debug(get_data)
@@ -41,8 +41,10 @@ def get_aging():
     CPU = float(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command('netstat -an | grep tcp | wc -l',get_pty=True)
     TCP_CONNECT = int(stdout.read().decode('utf-8'))
-    stdin, stdout, stderr = ssh.exec_command("df -h / | sed -n '2p' | awk '{print $4}'",get_pty=True)
-    SPACE_SIZE = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("df -m / | sed -n '2p' | awk '{print $4}'",get_pty=True)
+    SPACE_SIZE_GEN = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("df -m /tdfs | sed -n '2p' | awk '{print $4}'",get_pty=True)
+    SPACE_SIZE_TDFS = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep 'Tasks' -A 0 | awk '{print $(NF-1)}'",get_pty=True)
     ZOMBIE = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print $(NF-7)}'",get_pty=True)
@@ -70,12 +72,13 @@ def get_aging():
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-3)}'",get_pty=True)
     CASSANDRA_CPU = float(stdout.read().decode('utf-8'))
     ssh.close() # 关闭连接
-    '''
-    return_dict = {
+
+    data = {
     'AVAILABLE_MEMORY' : AVAILABLE_MEMORY,
     'CPU' : CPU,
     'TCP_CONNECT' : TCP_CONNECT,
-    'SPACE_SIZE' : SPACE_SIZE,
+    'SPACE_SIZE_GEN' : SPACE_SIZE_GEN,
+    'SPACE_SIZE_TDFS' : SPACE_SIZE_TDFS,
     'ZOMBIE' : ZOMBIE,
     'TOMCAT_VIRT' : TOMCAT_VIRT,
     'TOMCAT_RES' : TOMCAT_RES,
@@ -89,13 +92,19 @@ def get_aging():
     'CASSANDRA_VIRT' : CASSANDRA_VIRT,
     'CASSANDRA_RES' : CASSANDRA_RES,
     'CASSANDRA_CPU' : CASSANDRA_CPU
-    } 
-    return json.dumps(return_dict, ensure_ascii=False) # JSON格式对齐
-    '''
-    return_dict = [AVAILABLE_MEMORY, CPU, TCP_CONNECT, SPACE_SIZE, ZOMBIE, TOMCAT_VIRT, TOMCAT_RES, TOMCAT_CPU, X1_VIRT, X1_RES, X1_CPU, MYSQL_VIRT, MYSQL_RES, MYSQL_CPU, CASSANDRA_VIRT, CASSANDRA_RES, CASSANDRA_CPU]
+    }
+    # 此为API接口的标准格式
+    return_dict = {
+    'code' : 200,
+    'message' : '成功',
+    'data' : data
+    }
+    return json.dumps(return_dict, ensure_ascii=True) # JSON格式对齐
+
+    # data = [AVAILABLE_MEMORY, CPU, TCP_CONNECT, SPACE_SIZE_GEN, SPACE_SIZE_TDFS, ZOMBIE, TOMCAT_VIRT, TOMCAT_RES, TOMCAT_CPU, X1_VIRT, X1_RES, X1_CPU, MYSQL_VIRT, MYSQL_RES, MYSQL_CPU, CASSANDRA_VIRT, CASSANDRA_RES, CASSANDRA_CPU]
     logger.debug(return_dict)
 
-    return render_template('aging.html', return_dict=return_dict)
+    # return render_template('aging.html', data=data)
 
 
 if __name__ == "__main__":
