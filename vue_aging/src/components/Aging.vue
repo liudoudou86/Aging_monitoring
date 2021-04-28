@@ -25,7 +25,7 @@
                 </el-form-item>
                 <!-- 按钮 -->
                 <el-form-item class="btns">
-                    <el-button type="primary" @click="submitAgingForm('agingFormRef')">查询</el-button>
+                    <el-button :plain="true" type="primary" @click="submitAgingForm('agingFormRef')">查询</el-button>
                     <el-button type="info" @click="resetAgingForm('agingFormRef')">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -79,8 +79,8 @@ export default {
                 function (result) {
                     console.log(result)
                 },
-                function () {
-                    alert('请求失败！')
+                () => {
+                    this.$message.error('请求失败'); // 此处箭头函数的作用是为了更清晰的指向Message
                 }
             )
         }
