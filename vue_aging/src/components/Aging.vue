@@ -63,7 +63,7 @@ export default {
                     { min: 6, max: 20, message: '长度在6到20个字符', trigger: 'blur' }
                 ]
             }
-        }        
+        }
     },
     methods: {
         // 这是重置表单数据的按钮
@@ -71,15 +71,18 @@ export default {
             // console.log(this)
             // 此为resetFields方法对未定义的判断
             if (this.$refs[agingFormRef] !== undefined) {
-                this.$refs[agingFormRef].resetFields();
+                this.$refs[agingFormRef].resetFields()
             }
         },
         submitAgingForm (agingFormRef) {
-            this.$refs[agingFormRef].validate(async valid => {
-                if (!valid) return;
-                const result = await this.$http.get("aging?IP_ADDRESS=" + this.agingForm.IP_ADDRESS + "&PORT=" + this.agingForm.PORT + "&USER=" + this.agingForm.USER + "&PASSWORD=" + this.agingForm.PASSWORD);
-                console.log(result)
-            })
+            const result = this.$http.get('/aging?IP_ADDRESS=' + this.agingForm.IP_ADDRESS + '&PORT=' + this.agingForm.PORT + '&USER=' + this.agingForm.USER + '&PASSWORD=' + this.agingForm.PASSWORD).then(
+                function (result) {
+                    console.log(result)
+                },
+                function () {
+                    alert('请求失败！')
+                }
+            )
         }
     }
 }

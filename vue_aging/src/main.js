@@ -6,7 +6,7 @@ import './plugins/element.js'
 import './assets/css/global.css'
 import axios from 'axios'
 // 配置请求的根网址
-axios.defaults.baseURL = 'http://192.168.28.234:5000'
+axios.defaults.baseURL = '/proxy'
 Vue.prototype.$http = axios
 
 Vue.config.productionTip = false

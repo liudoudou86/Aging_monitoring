@@ -73,7 +73,7 @@ def get_aging():
     CASSANDRA_CPU = float(stdout.read().decode('utf-8'))
     ssh.close() # 关闭连接
 
-    data = {
+    return_dict = {
     'AVAILABLE_MEMORY' : AVAILABLE_MEMORY,
     'CPU' : CPU,
     'TCP_CONNECT' : TCP_CONNECT,
@@ -92,12 +92,6 @@ def get_aging():
     'CASSANDRA_VIRT' : CASSANDRA_VIRT,
     'CASSANDRA_RES' : CASSANDRA_RES,
     'CASSANDRA_CPU' : CASSANDRA_CPU
-    }
-    # 此为API接口的标准格式
-    return_dict = {
-    'code' : 200,
-    'message' : '成功',
-    'data' : data
     }
     return json.dumps(return_dict, ensure_ascii=True) # JSON格式对齐
 
