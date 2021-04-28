@@ -3,6 +3,7 @@
 # Author:lz
 
 import json
+import time
 
 import paramiko
 from flask import Flask, jsonify, render_template, request
@@ -34,6 +35,8 @@ def get_aging():
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(IP_ADDRESS,PORT,USER,PASSWORD)
+
+    # start = time.time()
     # 远程对服务器进行top指令查询
     stdin, stdout, stderr = ssh.exec_command("free -m | sed -n '2p' | awk '{print $(NF)}'",get_pty=True)
     AVAILABLE_MEMORY = int(stdout.read().decode('utf-8'))
@@ -73,6 +76,8 @@ def get_aging():
     CASSANDRA_CPU = float(stdout.read().decode('utf-8'))
     ssh.close() # 关闭连接
 
+    # end = time.time()
+
     return_dict = {
     'AVAILABLE_MEMORY' : AVAILABLE_MEMORY,
     'CPU' : CPU,
@@ -95,10 +100,11 @@ def get_aging():
     }
     return json.dumps(return_dict, ensure_ascii=True) # JSON格式对齐
 
-    # data = [AVAILABLE_MEMORY, CPU, TCP_CONNECT, SPACE_SIZE_GEN, SPACE_SIZE_TDFS, ZOMBIE, TOMCAT_VIRT, TOMCAT_RES, TOMCAT_CPU, X1_VIRT, X1_RES, X1_CPU, MYSQL_VIRT, MYSQL_RES, MYSQL_CPU, CASSANDRA_VIRT, CASSANDRA_RES, CASSANDRA_CPU]
-    logger.debug(return_dict)
+    # return_dict = [AVAILABLE_MEMORY, CPU, TCP_CONNECT, SPACE_SIZE_GEN, SPACE_SIZE_TDFS, ZOMBIE, TOMCAT_VIRT, TOMCAT_RES, TOMCAT_CPU, X1_VIRT, X1_RES, X1_CPU, MYSQL_VIRT, MYSQL_RES, MYSQL_CPU, CASSANDRA_VIRT, CASSANDRA_RES, CASSANDRA_CPU]
+    # return render_template('aging.html', return_dict=return_dict)
+    # logger.debug(f"total: {end - start}s")
 
-    # return render_template('aging.html', data=data)
+    logger.debug(return_dict)
 
 
 if __name__ == "__main__":

@@ -25,7 +25,7 @@
                 </el-form-item>
                 <!-- 按钮 -->
                 <el-form-item class="btns">
-                    <el-button :plain="true" type="primary" @click="submitAgingForm('agingFormRef')">查询</el-button>
+                    <el-button type="primary" @click="submitAgingForm('agingFormRef')">查询</el-button>
                     <el-button type="info" @click="resetAgingForm('agingFormRef')">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -76,11 +76,13 @@ export default {
         },
         submitAgingForm (agingFormRef) {
             const result = this.$http.get('/aging?IP_ADDRESS=' + this.agingForm.IP_ADDRESS + '&PORT=' + this.agingForm.PORT + '&USER=' + this.agingForm.USER + '&PASSWORD=' + this.agingForm.PASSWORD).then(
-                function (result) {
-                    console.log(result)
-                },
                 () => {
-                    this.$message.error('请求失败'); // 此处箭头函数的作用是为了更清晰的指向Message
+                    this.$message.success('请求成功') // 此处箭头函数的作用是为了更清晰的指向Message
+                    this.$router.push('/home')
+                }
+            ).catch(
+                () => {
+                    this.$message.error('请求失败')
                 }
             )
         }
