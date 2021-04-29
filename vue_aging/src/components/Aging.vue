@@ -76,9 +76,11 @@ export default {
         },
         submitAgingForm (agingFormRef) {
             const result = this.$http.get('/aging?IP_ADDRESS=' + this.agingForm.IP_ADDRESS + '&PORT=' + this.agingForm.PORT + '&USER=' + this.agingForm.USER + '&PASSWORD=' + this.agingForm.PASSWORD).then(
-                () => {
+                (result) => {
                     this.$message.success('请求成功') // 此处箭头函数的作用是为了更清晰的指向Message
-                    this.$router.push('/home')
+                    this.$router.push({path: '/home'})
+                    sessionStorage.setItem('agingdata', JSON.stringify(result.data)) // 将接口返回值存入sessionStorage中
+                    // console.log(result.data)
                 }
             ).catch(
                 () => {

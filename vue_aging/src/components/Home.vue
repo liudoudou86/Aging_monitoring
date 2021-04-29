@@ -13,44 +13,20 @@
             <!-- 侧边栏 -->
             <el-aside width="200px">
                 <!-- 侧边栏区域 -->
-                <el-menu background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+                <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409EFF" unique-opened router>
                     <!-- 一级菜单 -->
-                    <el-submenu index="1">
-                        <!-- 一级菜单模板区域 -->
-                        <template slot="title">
-                            <!-- 图表 -->
-                            <i class="el-icon-location"></i>
-                            <!-- 文本内容 -->
-                            <span>七天老化查询</span>
-                        </template>
-                        <el-submenu index="1-1">
-                            <template slot="title">政法行业测试部</template>
-                            <el-menu-item index="1-1-1">监察委</el-menu-item>
-                            <el-menu-item index="1-1-2">检法</el-menu-item>
-                            <el-menu-item index="1-1-3">监管</el-menu-item>
-                        </el-submenu>
-                        <el-submenu index="1-2">
-                            <template slot="title">通用行业测试部</template>
-                            <el-menu-item index="1-2-1">交通</el-menu-item>
-                        </el-submenu>
-                    </el-submenu>
-                    <el-menu-item index="2">
-                        <i class="el-icon-menu"></i>
-                        <span slot="title">长期老化查询</span>
-                    </el-menu-item>
-                    <el-menu-item index="3">
+                    <el-menu-item index="/select">
                         <i class="el-icon-document"></i>
                         <span slot="title">老化查询结果</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                        <i class="el-icon-setting"></i>
-                        <span slot="title">老化说明</span>
                     </el-menu-item>
                 </el-menu>
             </el-aside>
             <el-container>
                 <!-- 右侧内容主体 -->
-                <el-main>Main</el-main>
+                <el-main>
+                    <!-- 路由占位符 -->
+                    <router-view></router-view>
+                </el-main>
             </el-container>
         </el-container>
     </el-container>
@@ -90,6 +66,9 @@ export default {
 
 .el-aside {
     background-color: #545C64;
+    .el-menu {
+        border-right: none;
+    }
 }
 
 .el-main {
