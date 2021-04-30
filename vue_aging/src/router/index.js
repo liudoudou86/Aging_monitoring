@@ -23,8 +23,8 @@ const routes = [
     component: Home,
     redirect: '/welcome',
     children: [
-      { path: '/welcome',component: Welcome },
-      { path: '/select',component: Select }
+      { path: '/welcome', component: Welcome },
+      { path: '/select', component: Select }
     ]
   }
 ]

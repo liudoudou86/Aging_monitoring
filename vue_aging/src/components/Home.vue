@@ -1,4 +1,4 @@
-<template>  
+<template>
     <el-container class="home-container">
         <!-- 头部区域 -->
         <el-header>
@@ -34,11 +34,11 @@
 
 <script>
 export default {
-    methods: {
-        logout () {
-            this.$router.push('/aging')
-        }
+  methods: {
+    logout () {
+      this.$router.push('/aging')
     }
+  }
 }
 </script>
 

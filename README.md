@@ -9,3 +9,5 @@
 ## 开发过程中的坑点
 * cassandra数据查询时使用grep java_cassa是因为通过远程读取的top信息不完整，建议再排查类似问题可以直接查询grep java来确认查询的名字
 * Vue解决跨域问题需要修改vue.config.js文件中的内容
+* 接口返回值可以存储在sessionStorage中跳转到下一个页面再读取
+* 后端接口需要为数组格式

@@ -78,7 +78,7 @@ def get_aging():
 
     # end = time.time()
 
-    return_dict = {
+    return_dict = [{
     'AVAILABLE_MEMORY' : AVAILABLE_MEMORY,
     'CPU' : CPU,
     'TCP_CONNECT' : TCP_CONNECT,
@@ -97,7 +97,7 @@ def get_aging():
     'CASSANDRA_VIRT' : CASSANDRA_VIRT,
     'CASSANDRA_RES' : CASSANDRA_RES,
     'CASSANDRA_CPU' : CASSANDRA_CPU
-    }
+    }]
     return json.dumps(return_dict, ensure_ascii=True) # JSON格式对齐
 
     # return_dict = [AVAILABLE_MEMORY, CPU, TCP_CONNECT, SPACE_SIZE_GEN, SPACE_SIZE_TDFS, ZOMBIE, TOMCAT_VIRT, TOMCAT_RES, TOMCAT_CPU, X1_VIRT, X1_RES, X1_CPU, MYSQL_VIRT, MYSQL_RES, MYSQL_CPU, CASSANDRA_VIRT, CASSANDRA_RES, CASSANDRA_CPU]

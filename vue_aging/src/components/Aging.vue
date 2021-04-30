@@ -35,60 +35,61 @@
 
 <script>
 export default {
-    data () {
-        return {
-            // 这是表单的数据绑定
-            agingForm: {
-                IP_ADDRESS: '192.168.25.190',
-                PORT: '22',
-                USER: 'root',
-                PASSWORD: '111111'
-            },
-            // 这是表单的验证规则
-            agingFormRules: {
-                IP_ADDRESS: [
-                    { required: true, message: '请输入IP地址', trigger: 'blur' },
-                    { min: 4, max: 15, message: '长度在4到12个字符', trigger: 'blur' }
-                ],
-                PORT: [
-                    { required: true, message: '请输入端口号', trigger: 'blur' },
-                    { min: 2, max: 5, message: '长度在2到5个字符', trigger: 'blur' }
-                ],
-                USER: [
-                    { required: true, message: '请输入账户', trigger: 'blur' },
-                    { min: 4, max: 20, message: '长度在4到20个字符', trigger: 'blur' }
-                ],
-                PASSWORD: [
-                    { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 6, max: 20, message: '长度在6到20个字符', trigger: 'blur' }
-                ]
-            }
-        }
-    },
-    methods: {
-        // 这是重置表单数据的按钮
-        resetAgingForm (agingFormRef) {
-            // console.log(this)
-            // 此为resetFields方法对未定义的判断
-            if (this.$refs[agingFormRef] !== undefined) {
-                this.$refs[agingFormRef].resetFields()
-            }
-        },
-        submitAgingForm (agingFormRef) {
-            const result = this.$http.get('/aging?IP_ADDRESS=' + this.agingForm.IP_ADDRESS + '&PORT=' + this.agingForm.PORT + '&USER=' + this.agingForm.USER + '&PASSWORD=' + this.agingForm.PASSWORD).then(
-                (result) => {
-                    this.$message.success('请求成功') // 此处箭头函数的作用是为了更清晰的指向Message
-                    this.$router.push({path: '/home'})
-                    sessionStorage.setItem('agingdata', JSON.stringify(result.data)) // 将接口返回值存入sessionStorage中
-                    // console.log(result.data)
-                }
-            ).catch(
-                () => {
-                    this.$message.error('请求失败')
-                }
-            )
-        }
+  data () {
+    return {
+      // 这是表单的数据绑定
+      agingForm: {
+        IP_ADDRESS: '',
+        PORT: '',
+        USER: '',
+        PASSWORD: ''
+      },
+      // 这是表单的验证规则
+      agingFormRules: {
+        IP_ADDRESS: [
+          { required: true, message: '请输入IP地址', trigger: 'blur' },
+          { min: 4, max: 15, message: '长度在4到12个字符', trigger: 'blur' }
+        ],
+        PORT: [
+          { required: true, message: '请输入端口号', trigger: 'blur' },
+          { min: 2, max: 5, message: '长度在2到5个字符', trigger: 'blur' }
+        ],
+        USER: [
+          { required: true, message: '请输入账户', trigger: 'blur' },
+          { min: 4, max: 20, message: '长度在4到20个字符', trigger: 'blur' }
+        ],
+        PASSWORD: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 20, message: '长度在6到20个字符', trigger: 'blur' }
+        ]
+      }
     }
+  },
+  methods: {
+    // 这是重置表单数据的按钮
+    resetAgingForm (agingFormRef) {
+    // console.log(this)
+    // 此为resetFields方法对未定义的判断
+      if (this.$refs[agingFormRef] !== undefined) {
+        this.$refs[agingFormRef].resetFields()
+      }
+    },
+    submitAgingForm (agingFormRef) {
+      const api = '/aging?IP_ADDRESS=' + this.agingForm.IP_ADDRESS + '&PORT=' + this.agingForm.PORT + '&USER=' + this.agingForm.USER + '&PASSWORD=' + this.agingForm.PASSWORD
+      this.$http.get(api).then(
+        (result) => {
+          this.$message.success('请求成功') // 此处箭头函数的作用是为了更清晰的指向Message
+          this.$router.push({ path: '/home' })
+          sessionStorage.setItem('agingdata', JSON.stringify(result.data)) // 将接口返回值存入sessionStorage中
+          // console.log(result.data)
+        }
+      ).catch(
+        () => {
+          this.$message.error('请求失败')
+        }
+      )
+    }
+  }
 }
 </script>
 
