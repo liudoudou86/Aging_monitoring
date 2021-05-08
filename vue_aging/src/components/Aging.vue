@@ -76,6 +76,7 @@ export default {
     },
     submitAgingForm (agingFormRef) {
       const api = '/aging?IP_ADDRESS=' + this.agingForm.IP_ADDRESS + '&PORT=' + this.agingForm.PORT + '&USER=' + this.agingForm.USER + '&PASSWORD=' + this.agingForm.PASSWORD
+      sessionStorage.setItem('apiaddress', JSON.stringify(api)) // 将接口存入sessionStorage中
       this.$http.get(api).then(
         (result) => {
           this.$message.success('请求成功') // 此处箭头函数的作用是为了更清晰的指向Message

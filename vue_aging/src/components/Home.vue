@@ -6,7 +6,11 @@
                 <img src="../assets/tiandy_logo.png" alt="">
                 <span>老化数据查询平台</span>
             </div>
-            <el-button type="primary" @click="logout">返回</el-button>
+            <div>
+                <!-- 将按钮封装到一起 -->
+                <el-button type="success" @click="refresh">刷新</el-button>
+                <el-button type="primary" @click="logout">返回</el-button>
+            </div>
         </el-header>
         <!-- 整体页面主体 -->
         <el-container>
@@ -37,6 +41,21 @@ export default {
   methods: {
     logout () {
       this.$router.push('/aging')
+    },
+    refresh () {
+      this.$router.push({ path: '/welcome' })
+      const api = JSON.parse(sessionStorage.getItem('apiaddress'))
+      this.$http.get(api).then(
+        (result) => {
+          this.$message.success('请求成功') // 此处箭头函数的作用是为了更清晰的指向Message
+          sessionStorage.setItem('agingdata', JSON.stringify(result.data)) // 将接口返回值存入sessionStorage中
+          // console.log(result.data)
+        }
+      ).catch(
+        () => {
+          this.$message.error('请求失败')
+        }
+      )
     }
   }
 }
