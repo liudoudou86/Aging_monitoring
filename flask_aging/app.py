@@ -3,7 +3,6 @@
 # Author:lz
 
 import json
-import time
 
 import paramiko
 from flask import Flask, jsonify, render_template, request
@@ -36,7 +35,6 @@ def get_aging():
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(IP_ADDRESS,PORT,USER,PASSWORD)
 
-    # start = time.time()
     # 远程对服务器进行top指令查询
     stdin, stdout, stderr = ssh.exec_command("free -m | sed -n '2p' | awk '{print $(NF)}'",get_pty=True)
     AVAILABLE_MEMORY = int(stdout.read().decode('utf-8'))
@@ -50,24 +48,32 @@ def get_aging():
     SPACE_SIZE_TDFS = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep 'Tasks' -A 0 | awk '{print $(NF-1)}'",get_pty=True)
     ZOMBIE = int(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print $1}'",get_pty=True)
+    TOMCAT_PID = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print $(NF-7)}'",get_pty=True)
     TOMCAT_VIRT = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print $(NF-6)}'",get_pty=True)
     TOMCAT_RES = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_tomcat$ | awk '{print $(NF-3)}'",get_pty=True)
     TOMCAT_CPU = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print $1}'",get_pty=True)
+    X1_PID = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print $(NF-7)}'",get_pty=True)
     X1_VIRT = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print $(NF-6)}'",get_pty=True)
     X1_RES = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep x1$ | awk '{print $(NF-3)}'",get_pty=True)
     X1_CPU = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print $1}'",get_pty=True)   
+    MYSQL_PID = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print $(NF-7)}'",get_pty=True)   
     MYSQL_VIRT = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print $(NF-6)}'",get_pty=True)
     MYSQL_RES = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep mysqld$ | awk '{print $(NF-3)}'",get_pty=True)
     MYSQL_CPU = str(stdout.read().decode('utf-8'))
+    stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $1}'",get_pty=True)
+    CASSANDRA_PID = int(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-7)}'",get_pty=True)
     CASSANDRA_VIRT = str(stdout.read().decode('utf-8'))
     stdin, stdout, stderr = ssh.exec_command("top -b -n 1 | grep java_cassa | awk '{print $(NF-6)}'",get_pty=True)
@@ -76,8 +82,6 @@ def get_aging():
     CASSANDRA_CPU = str(stdout.read().decode('utf-8'))
     ssh.close() # 关闭连接
 
-    # end = time.time()
-
     return_dict = [{
     'AVAILABLE_MEMORY' : AVAILABLE_MEMORY,
     'CPU' : CPU,
@@ -85,27 +89,29 @@ def get_aging():
     'SPACE_SIZE_GEN' : SPACE_SIZE_GEN,
     'SPACE_SIZE_TDFS' : SPACE_SIZE_TDFS,
     'ZOMBIE' : ZOMBIE,
+    'TOMCAT_PID' : TOMCAT_PID,
     'TOMCAT_VIRT' : TOMCAT_VIRT,
     'TOMCAT_RES' : TOMCAT_RES,
     'TOMCAT_CPU' : TOMCAT_CPU,
+    'X1_PID' : X1_PID,
     'X1_VIRT' : X1_VIRT,
     'X1_RES' : X1_RES,
     'X1_CPU' : X1_CPU,
+    'MYSQL_PID' : MYSQL_PID,
     'MYSQL_VIRT' : MYSQL_VIRT,
     'MYSQL_RES' : MYSQL_RES,
     'MYSQL_CPU' : MYSQL_CPU,
+    'CASSANDRA_PID' : CASSANDRA_PID,
     'CASSANDRA_VIRT' : CASSANDRA_VIRT,
     'CASSANDRA_RES' : CASSANDRA_RES,
     'CASSANDRA_CPU' : CASSANDRA_CPU
     }]
     return json.dumps(return_dict, ensure_ascii=True) # JSON格式对齐
+    logger.debug(return_dict)
 
     # return_dict = [AVAILABLE_MEMORY, CPU, TCP_CONNECT, SPACE_SIZE_GEN, SPACE_SIZE_TDFS, ZOMBIE, TOMCAT_VIRT, TOMCAT_RES, TOMCAT_CPU, X1_VIRT, X1_RES, X1_CPU, MYSQL_VIRT, MYSQL_RES, MYSQL_CPU, CASSANDRA_VIRT, CASSANDRA_RES, CASSANDRA_CPU]
     # return render_template('aging.html', return_dict=return_dict)
     # logger.debug(f"total: {end - start}s")
-
-    logger.debug(return_dict)
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=5000, threaded=True) # threaded=True为开启多线程
