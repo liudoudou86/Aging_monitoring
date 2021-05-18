@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>老化查询平台</title>
+    <style type="text/css"> 
+      *{
+        background-color: #8CC7B5;
+        float: left;
+        font-size: 20px;
+      }
+      .ip{
+        height: 25px;
+        width: 70%;
+        border-radius: 8px;
+      }
+      .port{
+        height: 25px;
+        width: 70%;
+        border-radius: 8px;
+      }
+      .user{
+        height: 25px;
+        width: 70%;
+        border-radius: 8px;
+      }
+      .password{
+        height: 25px;
+        width: 70%;
+        border-radius: 8px;
+      }
+      .button{
+        height: 30px;
+        width: 100%;
+        border-radius: 8px;
+      }
+      .iframe{
+        height: 30px;
+        width: 100%;
+        border-radius: 8px;
+      }
+    </style>
+    <script type="text/javascript">
+			function inOut(arg){
+				var ip = document.getElementById('ip').value;
+				var port = document.getElementById('port').value;
+				var user = document.getElementById('user').value;
+        var password = document.getElementById('password').value;
+				var url = "http://192.168.28.80:5000/aging?IP_ADDRESS=" + ip + "&PORT=" + port + "&USER=" + user + "&PASSWORD=" + password;
+				parent.document.getElementById("iframe").src= url;
+			}
+		</script>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <tr>
+                <th>
+                    IP地址：
+                </th>
+                <th>
+                    <input id="ip" class="ip" type = "text" name = "IP_ADDRESS"/>
+                </th>
+                <th>
+                    端口：
+                </th>
+                <th>
+                    <input id="port" class="port" type = "text" name = "PORT"/>
+                </th>
+                <th>
+                    账户：
+                </th>
+                <th>
+                    <input id="user" class="user" type = "text" name = "USER"/>
+                </th>
+                <th>
+                    密码：
+                </th>
+                <th>
+                    <input id="password" class="password" type = "text" name = "PASSWORD"/>
+                </th>
+                <th>
+                    <input class="button" type="submit" value="查询" style="width: 60px" onclick="inOut(0);">
+                </th>
+            </tr>
+        </table>
+        <iframe id="iframe" class="iframe" style="width: 81%;height: 110px;">    
+        </iframe>
+    </div>
+</body>
+</html>
