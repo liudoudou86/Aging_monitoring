@@ -96,8 +96,11 @@ export default {
 
 <style lang="less" scoped>
 .Aging_container {
-    background-color: #2B4B6B;
+    background: url('../assets/background.png');
+    background-size: 100% 100%;
+    width: 100%;
     height: 100%;
+    position: fixed;
 }
 
 .Aging_box {
@@ -113,7 +116,6 @@ export default {
         height: 40px;
         width: 150px;
         padding: 15px;
-        box-shadow: 0 0 50px yellowgreen;
         position: absolute;
         left: 50%;
         transform: translate(-50%, -150%);
