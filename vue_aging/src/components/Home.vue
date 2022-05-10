@@ -3,7 +3,7 @@
         <!-- 头部区域 -->
         <el-header>
             <div>
-                <img src="../assets/tiandy_logo.png" alt="">
+                <img src="../assets/logo.png" alt="">
                 <span>老化数据查询平台</span>
             </div>
             <div>
